@@ -59,3 +59,28 @@ plt.figure()
 plt.imshow(transformed_img)
 plt.title("Transformed Image")
 plt.show()
+import numpy as np
+import math
+
+def rotate_image_matrix(image, angle_degrees):
+    theta = math.radians(angle_degrees)
+    rotation_matrix = np.array([
+        [math.cos(theta), -math.sin(theta)],
+        [math.sin(theta), math.cos(theta)]
+    ])
+    height, width = image.shape[:2]
+    rotated = np.zeros_like(image)
+    center_x, center_y = width // 2, height // 2
+    
+    for y in range(height):
+        for x in range(width):
+            xt = x - center_x
+            yt = y - center_y
+            xr, yr = np.dot(rotation_matrix, [xt, yt])
+            new_x = int(xr + center_x)
+            new_y = int(yr + center_y)
+            if 0 <= new_x < width and 0 <= new_y < height:
+                rotated[new_y, new_x] = image[y, x]
+    
+    return rotated
+    
